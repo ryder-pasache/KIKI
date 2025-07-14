@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brillas más que la Luna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to top, #0b0c2a, #1c1c3a);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .moon {
+      position: fixed;
+      top: 50px;
+      right: 60px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #dcdcdc 70%);
+      box-shadow: 0 0 40px #fff9;
+      animation: glow 3s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 40px #fff9; }
+      50% { box-shadow: 0 0 80px #fff; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      color: #f0e6ff;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #d1c4e9;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 28px 24px;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .letter-text {
+      white-space: pre-line;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #eeeeee;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+      color: #b39ddb;
+      font-size: 1rem;
+    }
+
+    .btn {
+      margin-top: 24px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      background: linear-gradient(90deg, #7c4dff, #9575cd);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(156,39,176,0.3);
+      transition: transform 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    video {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 18px rgba(255,255,255,0.1);
+    }
+
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #311b92;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🌙 LUNA FLOTANTE -->
+  <div class="moon"></div>
+
+  <!-- ✨ ESTRELLAS CANVAS -->
+  <canvas id="stars" class="stars"></canvas>
+
+  <!-- 🎵 MÚSICA -->
+  <audio id="musicaAmor" src="Río Roma - Mi Persona Favorita (Lyric Video).mp3" loop></audio>
+  <button id="playMusicBtn" class="music-btn" onclick="playMusic()">🎶 Reproducir</button>
+
+  <!-- 💌 CONTENIDO -->
+  <div class="container">
+    <h1>Kiki, más que la Luna</h1>
+    <p class="subtitle">Tú no solo brillas más que la luna… tú iluminaste mi mundo</p>
+    <div class="card">
+      <div class="letter-text" id="typewriterCarta"></div>
+      <div class="signature">– Rómulo</div>
+      <button class="btn" onclick="mostrarCarta()">Ver carta</button>
+
+      <!-- 🎥 VIDEO ROMÁNTICO -->
+      <video controls>
+        <source src="Video de WhatsApp 2025-07-13 a las 20.55.31_91d80685.mp4" type="video/mp4">
+        Tu navegador no puede reproducir el video.
+      </video>
+    </div>
+  </div>
+
+  <!-- 🌌 SCRIPT -->
+  <script>
+    // Estrellas animadas
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let w = window.innerWidth, h = window.innerHeight;
+    canvas.width = w; canvas.height = h;
+
+    const stars = Array.from({length: 80}, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.3 + 0.05
+    }));
+
+    function animateStars() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#fff';
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > h) {
+          star.y = 0;
+          star.x = Math.random() * w;
+        }
+      });
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', () => {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+    });
+
+    animateStars();
+
+    // Música
+    const audio = document.getElementById('musicaAmor');
+    function playMusic() {
+      audio.play();
+      document.getElementById('playMusicBtn').style.display = 'none';
+    }
+
+    // Carta efecto máquina de escribir
+    const textoCarta = `Hola Kiki:\n\nHay muchas maneras de decir "te quiero", pero ninguna me parece tan real como cuando te miro y sé que estás aquí.\n\nNo eres solo una parte de mi vida, eres la luz que llegó cuando todo era sombra. Iluminaste mi mundo sin pedir nada a cambio.\n\nTu forma de ser, tu risa, incluso tus silencios, me hicieron ver todo con otros ojos. Y ahora, cada vez que miro la luna, pienso que aún con su belleza… tú brillas más.\n\nGracias por ser tú.`;
+    let index = 0;
+    function mostrarCarta() {
+      const el = document.getElementById('typewriterCarta');
+      el.textContent = '';
+      index = 0;
+      function step() {
+        if (index < textoCarta.length) {
+          el.textContent += textoCarta[index];
+          index++;
+          setTimeout(step, textoCarta[index - 1] === '.' ? 80 : 28);
+        }
+      }
+      step();
+    }
+  </script>
+</body>
+</html>
